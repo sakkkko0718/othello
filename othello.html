@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オセロゲーム</title>
+    <style>
+        #board {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            border: 1px solid black;
+            background-color: green;
+        }
+
+        #board div {
+            width: 48px;
+            height: 48px;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 1.1;
+            font-size: 48px;
+        }
+
+        #box div {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: black;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="board">
+    </div>
+
+    <script>
+        let count = 0;
+
+        const game = [
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 1, 2, 0, 0, 0,
+            0, 0, 0, 2, 1, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+        ]
+
+
+        const board = document.querySelector('#board');
+        const box = document.querySelector('#box');
+
+        let notStone = 0 //何もない
+        let white = 1 //白の石
+        let black = 2 //黒の石
+
+        //横を変数i
+        //縦を変数j
+        // for (let i = 0; i < 8; i++) {
+        //     const square = document.createElement('div');
+        //     for (let j = 0; j < 8; j++) {
+        //     }
+        //     board.appendChild(square)
+        // }
+
+        // 1 ＝ white 〇
+        // 2 ＝ black ●
+
+        function makeWhite(square) {
+            square.textContent = '●'
+            square.style.color = 'white'
+        }
+
+        function makeBlack(square) {
+            square.textContent = '●'
+            square.style.color = 'black'
+        }
+
+        for (let i = 0; i < 8; i++) {
+            const square = document.createElement('div');
+            // デフォルト（白２個、黒２個）
+            if (i === 27 || i === 36) {
+                makeWhite(square);
+                game[i] = 1
+            }
+            if (i === 28 || i === 35) {
+                makeBlack(square);
+                game[i] = 2
+            }
+            // 黒と白を置けるようにする（初手、黒）
+            square.addEventListener('click', () => {
+                if (count % 2 === 0) {
+                    makeBlack(square);
+                    game[i] = 2;
+                    if (game[i] == 2) { //黒置いた時（右側）
+                        if (game[i + 1] === 1) { //置いた隣が白の時
+                            if (game[i + 2] === 2) { //更に、その隣が黒の時
+                                game[i + 1] = 2 //挟まれた白は黒に変わる
+                                //ここに盤の石の色も変えられたらいいのになぁ
+                                makeBlack(square);//動かない
+                            }
+                        }
+                    }
+                    if (game[i] == 2) { //黒置いた時（左側）
+                        if (game[i - 1] === 1) { //置いた隣が白の時
+                            if (game[i - 2] === 2) { //更に、その隣が黒の時
+                                game[i - 1] = 2 //挟まれた白は黒に変わる
+                                makeBlack(square);
+                            }
+                        }
+                    }
+                    // if (game[i] == 2) { //黒置いた時（上縦）
+                    //     if (game[i + 8] === 1) { //置いた上が白
+                    //         if (game[i + 16] === 2) { //更に、その上が黒
+                    //             game[i + 8] = 2 //挟まれた白は黒に変わる
+                    //         }
+                    //     }
+                    // }
+                } else {
+                    makeWhite(square);
+                    game[i] = 1
+                }
+                count++;
+                // reverse();
+                // sliceArray();
+                console.log(game)
+            });
+
+            board.appendChild(square)
+        }
+
+        const sliceArray = () => {
+            // 横方向
+            const row1 = game.slice(0, 8)
+            const row2 = game.slice(8, 16)
+            const row3 = game.slice(16, 27)
+            const row4 = game.slice(27, 32)
+            const row5 = game.slice(32, 40)
+            const row6 = game.slice(40, 48)
+            const row7 = game.slice(48, 56)
+            const row8 = game.slice(56, 64)
+        }
+
+        const reverse = () => {
+        }
+
+
+        // const boxClone = box.cloneNode(true); 要素を複製
+    </script>
+</body>
+
+</html>
